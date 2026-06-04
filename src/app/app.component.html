@@ -1,0 +1,61 @@
+<div class="app">
+  <header class="header">
+    <h1>Task List</h1>
+    <p class="subtitle">A simple Angular app</p>
+  </header>
+
+  <form class="add-form" (ngSubmit)="addTask()">
+    <label class="visually-hidden" for="new-task">New task</label>
+    <input
+      id="new-task"
+      type="text"
+      name="newTask"
+      [(ngModel)]="newTaskText"
+      placeholder="What do you need to do?"
+      autocomplete="off"
+    />
+    <button type="submit" [disabled]="!newTaskText.trim()">Add</button>
+  </form>
+
+  @if (tasks.length === 0) {
+    <p class="empty">No tasks yet. Add one above.</p>
+  } @else {
+    <ul class="task-list">
+      @for (task of tasks; track task.id) {
+        <li [class.done]="task.done">
+          <label class="task-row">
+            <input
+              type="checkbox"
+              [checked]="task.done"
+              (change)="toggleTask(task)"
+            />
+            <span class="task-text">{{ task.text }}</span>
+          </label>
+          <button
+            type="button"
+            class="remove"
+            (click)="removeTask(task.id)"
+            aria-label="Remove task"
+          >
+            Remove
+          </button>
+        </li>
+      }
+    </ul>
+
+    <footer class="footer">
+      <span>{{ activeCount }} active</span>
+      @if (allDone) {
+        <span class="badge">All done!</span>
+      }
+      <button
+        type="button"
+        class="link"
+        (click)="clearCompleted()"
+        [disabled]="tasks.length === activeCount"
+      >
+        Clear completed
+      </button>
+    </footer>
+  }
+</div>
